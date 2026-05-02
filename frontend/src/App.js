@@ -28,6 +28,9 @@ function App() {
       setLeads(res.data);
     } catch (err) {
       console.error("Error fetching leads:", err);
+      if (err.response && err.response.status === 401) {
+        logout();
+      }
     }
   };
 
