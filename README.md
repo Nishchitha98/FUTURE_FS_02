@@ -179,7 +179,7 @@ Deployment improvements
 
 
 ## 👨‍💻 Author
-Nishchitha
+Nishchitha N R
 
 Full Stack Developer (MERN)
 
