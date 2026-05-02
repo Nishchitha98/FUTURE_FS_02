@@ -8,13 +8,9 @@ import SettingsView from "./components/SettingsView";
 import Login from "./pages/Login";
 
 function App() {
-  // 🔐 Always start at login
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // Clear any existing session token when the app first loads
-  useEffect(() => {
-    localStorage.removeItem("token");
-  }, []);
+  // 🔐 Secure Auth State
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  const [authChecking, setAuthChecking] = useState(!!localStorage.getItem("token"));
 
   const [leads, setLeads] = useState([]);
   const [search, setSearch] = useState("");
@@ -32,8 +28,11 @@ function App() {
     } catch (err) {
       console.error("Error fetching leads:", err);
       if (err.response && err.response.status === 401) {
-        logout();
+        localStorage.removeItem("token");
+        setIsLoggedIn(false);
       }
+    } finally {
+      setAuthChecking(false);
     }
   };
 
@@ -65,6 +64,18 @@ function App() {
 
     return matchesSearch && matchesStatus;
   });
+
+  // ⏳ Loading State during Auth Check
+  if (authChecking) {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center", background: "var(--bg-main)" }}>
+        <div style={{ textAlign: "center", color: "var(--primary)" }}>
+          <i className="fas fa-circle-notch fa-spin" style={{ fontSize: "3rem", marginBottom: "15px" }}></i>
+          <h3 style={{ fontFamily: "'Outfit', sans-serif" }}>Verifying Session...</h3>
+        </div>
+      </div>
+    );
+  }
 
   // 🔐 Protect app
   if (!isLoggedIn) {
