@@ -7,8 +7,8 @@ This project simulates a real-world **Lead Management System used in startups, a
 ---
 
 ## 🔗 Live Demo
-Frontend: https://your-frontend-link.netlify.app  
-Backend: https://your-backend-link.onrender.com  
+Frontend: https://crm-frontend-futureintern.netlify.app  
+Backend: https://future-fs-02-4kjq.onrender.com
 
 ---
 
