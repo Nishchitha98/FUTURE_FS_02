@@ -135,7 +135,7 @@ Token stored in localStorage
 Protected API calls use token
 
 ---
----
+
 
 ## 🎯 Key Learnings
 Full Stack CRUD operations
@@ -147,7 +147,6 @@ Real-world CRM logic
 
 ---
 
----
 
 ## 🚀 Future Improvements
 Email notifications for leads
@@ -158,7 +157,6 @@ Deployment improvements
 
 ---
 
----
 
 ## 👨‍💻 Author
 Nishchitha
