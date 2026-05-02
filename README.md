@@ -92,19 +92,27 @@ FUTURE_FS_02/
 ---
 
 ## ⚙️ Installation Guide
-### 1️⃣ Clone Repository```bashgit clone https://github.com/your-username/crm-dashboard.gitcd crm-dashboard
+### 1️⃣ Clone Repository 
+git clone https://github.com/Nishchitha98/FUTURE_FS_02.git
 
 ### 2️⃣ Backend Setup
 cd backend 
+
 npm install
+
 Create .env file:
+
 PORT=5000MONGO_URI=your_mongodb_connection_stringJWT_SECRET=your_secret_key
+
 Run backend:
+
 npm run dev
 
 ### 3️⃣ Frontend Setup
 cd frontend
+
 npm install
+
 npm start
 
 ### 🔌 API Endpoints
@@ -130,8 +138,11 @@ POST /api/auth/login → Admin login
 
 ## 🔐 Authentication Flow
 Admin logs in
+
 JWT token generated
+
 Token stored in localStorage
+
 Protected API calls use token
 
 ---
@@ -139,10 +150,15 @@ Protected API calls use token
 
 ## 🎯 Key Learnings
 Full Stack CRUD operations
+
 REST API development
+
 JWT Authentication
+
 React state management
+
 MongoDB schema design
+
 Real-world CRM logic
 
 ---
@@ -150,9 +166,13 @@ Real-world CRM logic
 
 ## 🚀 Future Improvements
 Email notifications for leads
+
 Role-based access (Admin/User)
+
 Analytics charts (graphs)
+
 Export leads (CSV/Excel)
+
 Deployment improvements
 
 ---
@@ -160,12 +180,17 @@ Deployment improvements
 
 ## 👨‍💻 Author
 Nishchitha
+
 Full Stack Developer (MERN)
+
 Engineering Student
 
 If you like this project:
+
 ⭐ Star this repository
+
 📌 Share on LinkedIn
+
 🚀 Add to your portfolio
 
 ---
