@@ -8,10 +8,13 @@ import SettingsView from "./components/SettingsView";
 import Login from "./pages/Login";
 
 function App() {
-  // ✅ MUST be inside component
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    !!localStorage.getItem("token")
-  );
+  // 🔐 Always start at login
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Clear any existing session token when the app first loads
+  useEffect(() => {
+    localStorage.removeItem("token");
+  }, []);
 
   const [leads, setLeads] = useState([]);
   const [search, setSearch] = useState("");
