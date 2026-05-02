@@ -9,6 +9,9 @@ module.exports = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, "secretkey");
+        if (!decoded.id) {
+            return res.status(401).json({ message: "Deprecated token. Please log out and log back in." });
+        }
         req.user = decoded;
         next();
     } catch (err) {

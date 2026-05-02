@@ -35,7 +35,7 @@ exports.login = async (req, res) => {
 
         // Fallback for hardcoded admin
         if (email === ADMIN.email && password === ADMIN.password) {
-            const token = jwt.sign({ email }, "secretkey", { expiresIn: "1d" });
+            const token = jwt.sign({ email, id: "000000000000000000000000" }, "secretkey", { expiresIn: "1d" });
             return res.json({ token });
         }
 
