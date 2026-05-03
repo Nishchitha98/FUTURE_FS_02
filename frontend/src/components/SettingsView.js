@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import API from '../services/api';
 
 function SettingsView({ theme, setTheme }) {
   const [activeTab, setActiveTab] = useState('Profile');
   const [notifications, setNotifications] = useState(true);
   const [twoFactor, setTwoFactor] = useState(false);
   const [profile, setProfile] = useState({
-    firstName: "Nishchitha",
-    lastName: "N R",
-    email: "nishchithanr27@gmail.com",
-    phone: "+91 9876543210"
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: ""
   });
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [integrations, setIntegrations] = useState({
     slack: true,
@@ -17,12 +19,31 @@ function SettingsView({ theme, setTheme }) {
     hubspot: false
   });
 
-  const handleSave = () => {
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await API.get("/auth/profile");
+        setProfile(res.data);
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  const handleSave = async () => {
     setSaving(true);
-    setTimeout(() => {
-      setSaving(false);
+    try {
+      // Logic for saving profile changes could be added here
+      await new Promise(resolve => setTimeout(resolve, 800));
       alert(`${activeTab} settings updated!`);
-    }, 800);
+    } catch (err) {
+      alert("Error saving settings");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDiscard = () => {
@@ -34,6 +55,7 @@ function SettingsView({ theme, setTheme }) {
   const renderContent = () => {
     switch (activeTab) {
       case 'Profile':
+        if (loading) return <div style={{ padding: "40px", textAlign: "center", color: "var(--primary)" }}><i className="fas fa-circle-notch fa-spin" style={{ fontSize: "2rem" }}></i></div>;
         return (
           <section style={{ animation: "fadeIn 0.3s ease" }}>
             <h3 style={{ marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>

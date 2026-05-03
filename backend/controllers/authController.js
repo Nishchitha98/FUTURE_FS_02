@@ -8,7 +8,7 @@ const ADMIN = {
 
 exports.register = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, firstName, lastName, phone } = req.body;
         
         // Check if user exists
         const existingUser = await User.findOne({ email });
@@ -17,7 +17,7 @@ exports.register = async (req, res) => {
         }
 
         // Create new user
-        const user = new User({ email, password });
+        const user = new User({ email, password, firstName, lastName, phone });
         await user.save();
 
         // Generate token
@@ -26,6 +26,28 @@ exports.register = async (req, res) => {
         res.status(201).json({ token, message: "User registered successfully" });
     } catch (err) {
         res.status(500).json({ message: "Server error during registration", error: err.message });
+    }
+};
+
+exports.getProfile = async (req, res) => {
+    try {
+        // Fallback for hardcoded admin
+        if (req.user.id === "000000000000000000000000") {
+            return res.json({
+                email: ADMIN.email,
+                firstName: "Admin",
+                lastName: "User",
+                phone: "1234567890"
+            });
+        }
+
+        const user = await User.findById(req.user.id).select("-password");
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ message: "Server error fetching profile", error: err.message });
     }
 };
 

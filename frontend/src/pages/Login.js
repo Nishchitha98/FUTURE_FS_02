@@ -5,6 +5,9 @@ function Login({ setIsLoggedIn }) {
     const [isRegistering, setIsRegistering] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [phone, setPhone] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -13,7 +16,11 @@ function Login({ setIsLoggedIn }) {
         setLoading(true);
         try {
             const endpoint = isRegistering ? "/auth/register" : "/auth/login";
-            const res = await API.post(endpoint, { email, password });
+            const payload = isRegistering 
+                ? { email, password, firstName, lastName, phone } 
+                : { email, password };
+            
+            const res = await API.post(endpoint, payload);
             
             localStorage.setItem("token", res.data.token);
             setIsLoggedIn(true);
@@ -53,6 +60,72 @@ function Login({ setIsLoggedIn }) {
                 </p>
 
                 <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                    {isRegistering && (
+                        <>
+                            <div style={{ display: "flex", gap: "15px" }}>
+                                <div style={{ textAlign: "left", flex: 1 }}>
+                                    <label style={{ display: "block", fontSize: "0.85rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "8px" }}>First Name</label>
+                                    <input
+                                        type="text"
+                                        placeholder="John"
+                                        value={firstName}
+                                        onChange={(e) => setFirstName(e.target.value)}
+                                        required
+                                        style={{ 
+                                            width: "100%", 
+                                            padding: "12px 15px", 
+                                            border: "1px solid var(--border)", 
+                                            borderRadius: "8px",
+                                            outline: "none",
+                                            fontSize: "0.95rem",
+                                            background: "#f8fafc",
+                                            transition: "0.3s"
+                                        }}
+                                    />
+                                </div>
+                                <div style={{ textAlign: "left", flex: 1 }}>
+                                    <label style={{ display: "block", fontSize: "0.85rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "8px" }}>Last Name</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Doe"
+                                        value={lastName}
+                                        onChange={(e) => setLastName(e.target.value)}
+                                        required
+                                        style={{ 
+                                            width: "100%", 
+                                            padding: "12px 15px", 
+                                            border: "1px solid var(--border)", 
+                                            borderRadius: "8px",
+                                            outline: "none",
+                                            fontSize: "0.95rem",
+                                            background: "#f8fafc",
+                                            transition: "0.3s"
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <div style={{ textAlign: "left" }}>
+                                <label style={{ display: "block", fontSize: "0.85rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "8px" }}>Phone Number</label>
+                                <input
+                                    type="tel"
+                                    placeholder="+1 (555) 000-0000"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    required
+                                    style={{ 
+                                        width: "100%", 
+                                        padding: "12px 15px", 
+                                        border: "1px solid var(--border)", 
+                                        borderRadius: "8px",
+                                        outline: "none",
+                                        fontSize: "0.95rem",
+                                        background: "#f8fafc",
+                                        transition: "0.3s"
+                                    }}
+                                />
+                            </div>
+                        </>
+                    )}
                     <div style={{ textAlign: "left" }}>
                         <label style={{ display: "block", fontSize: "0.85rem", fontWeight: "600", color: "var(--text-muted)", marginBottom: "8px" }}>Email Address</label>
                         <input
