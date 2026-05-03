@@ -8,8 +8,8 @@ import SettingsView from "./components/SettingsView";
 import Login from "./pages/Login";
 
 function App() {
-  // 🔐 Secure Auth State
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  // 🔐 Secure Auth State — always start unauthenticated, verify token on mount
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [authChecking, setAuthChecking] = useState(!!localStorage.getItem("token"));
 
   const [leads, setLeads] = useState([]);
@@ -31,21 +31,42 @@ function App() {
         localStorage.removeItem("token");
         setIsLoggedIn(false);
       }
-    } finally {
-      setAuthChecking(false);
     }
   };
 
+  // ✅ On mount: verify existing token, then load leads
   useEffect(() => {
-    if (isLoggedIn) {
-      fetchLeads();
-    }
+    const token = localStorage.getItem("token");
+
+    const verifyAndLoad = async () => {
+      if (token) {
+        try {
+          const res = await API.get("/leads"); // validates token implicitly
+          setLeads(res.data);
+          setIsLoggedIn(true);
+        } catch (err) {
+          // Token invalid or expired — force login
+          localStorage.removeItem("token");
+          setIsLoggedIn(false);
+        }
+      }
+      setAuthChecking(false);
+    };
+
+    verifyAndLoad();
 
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href =
       "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css";
     document.head.appendChild(link);
+  }, []);
+
+  // 🔄 Re-fetch when logged in after login form submission
+  useEffect(() => {
+    if (isLoggedIn && !authChecking) {
+      fetchLeads();
+    }
   }, [isLoggedIn]);
 
   // 📊 Stats
