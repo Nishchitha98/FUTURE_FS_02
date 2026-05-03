@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
         await user.save();
 
         // Generate token
-        const token = jwt.sign({ email: user.email, id: user._id }, "secretkey", { expiresIn: "1d" });
+        const token = jwt.sign({ email: user.email, id: user._id }, process.env.JWT_SECRET || "crm_secret_123", { expiresIn: "1d" });
         
         res.status(201).json({ token, message: "User registered successfully" });
     } catch (err) {
@@ -35,7 +35,7 @@ exports.login = async (req, res) => {
 
         // Fallback for hardcoded admin
         if (email === ADMIN.email && password === ADMIN.password) {
-            const token = jwt.sign({ email, id: "000000000000000000000000" }, "secretkey", { expiresIn: "1d" });
+            const token = jwt.sign({ email, id: "000000000000000000000000" }, process.env.JWT_SECRET || "crm_secret_123", { expiresIn: "1d" });
             return res.json({ token });
         }
 
@@ -52,7 +52,7 @@ exports.login = async (req, res) => {
         }
 
         // Generate token
-        const token = jwt.sign({ email: user.email, id: user._id }, "secretkey", { expiresIn: "1d" });
+        const token = jwt.sign({ email: user.email, id: user._id }, process.env.JWT_SECRET || "crm_secret_123", { expiresIn: "1d" });
         
         res.json({ token });
     } catch (err) {
