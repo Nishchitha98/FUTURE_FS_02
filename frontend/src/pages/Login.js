@@ -7,7 +7,7 @@ function Login({ setIsLoggedIn }) {
     const [password, setPassword] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [phone, setPhone] = useState("");
+    const [phone, setPhone] = useState("+91 ");
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -110,7 +110,14 @@ function Login({ setIsLoggedIn }) {
                                     type="tel"
                                     placeholder="+1 (555) 000-0000"
                                     value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        if (val.startsWith("+91 ")) {
+                                            setPhone(val);
+                                        } else if (val.length < 4) {
+                                            setPhone("+91 ");
+                                        }
+                                    }}
                                     required
                                     style={{ 
                                         width: "100%", 

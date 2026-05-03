@@ -37,7 +37,7 @@ exports.getProfile = async (req, res) => {
                 email: ADMIN.email,
                 firstName: "Admin",
                 lastName: "User",
-                phone: "1234567890"
+                phone: "+91 9999999999"
             });
         }
 
@@ -79,5 +79,35 @@ exports.login = async (req, res) => {
         res.json({ token });
     } catch (err) {
         res.status(500).json({ message: "Server error during login", error: err.message });
+    }
+};
+
+exports.changePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        // Admin fallback check (not allowing password change for hardcoded admin for safety)
+        if (req.user.id === "000000000000000000000000") {
+            return res.status(403).json({ message: "Cannot change password for demo admin account" });
+        }
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Verify current password
+        const isMatch = await user.comparePassword(currentPassword);
+        if (!isMatch) {
+            return res.status(401).json({ message: "Incorrect current password" });
+        }
+
+        // Update password
+        user.password = newPassword;
+        await user.save(); // pre-save hook will hash it
+
+        res.json({ message: "Password updated successfully" });
+    } catch (err) {
+        res.status(500).json({ message: "Server error updating password", error: err.message });
     }
 };

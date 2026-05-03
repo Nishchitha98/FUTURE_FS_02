@@ -18,6 +18,11 @@ function SettingsView({ theme, setTheme }) {
     google: false,
     hubspot: false
   });
+  const [passwords, setPasswords] = useState({
+    current: "",
+    new: "",
+    confirm: ""
+  });
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -33,7 +38,36 @@ function SettingsView({ theme, setTheme }) {
     fetchProfile();
   }, []);
 
+  const handlePasswordChange = async () => {
+    if (!passwords.current || !passwords.new) {
+      alert("Please fill in both current and new password");
+      return;
+    }
+    if (passwords.new !== passwords.confirm) {
+      alert("New passwords do not match");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      await API.post("/auth/change-password", {
+        currentPassword: passwords.current,
+        newPassword: passwords.new
+      });
+      alert("Password updated successfully!");
+      setPasswords({ current: "", new: "", confirm: "" });
+    } catch (err) {
+      alert(err.response?.data?.message || "Error updating password");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleSave = async () => {
+    if (activeTab === 'Security') {
+      await handlePasswordChange();
+      return;
+    }
     setSaving(true);
     try {
       // Logic for saving profile changes could be added here
@@ -113,8 +147,24 @@ function SettingsView({ theme, setTheme }) {
               <div>
                 <h4 style={{ fontSize: "1rem", fontWeight: "600", marginBottom: "15px" }}>Change Password</h4>
                 <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxWidth: "400px" }}>
-                  <InputGroup label="Current Password" type="password" value="********" />
-                  <InputGroup label="New Password" type="password" />
+                  <InputGroup 
+                    label="Current Password" 
+                    type="password" 
+                    value={passwords.current} 
+                    onChange={(val) => setPasswords({...passwords, current: val})} 
+                  />
+                  <InputGroup 
+                    label="New Password" 
+                    type="password" 
+                    value={passwords.new} 
+                    onChange={(val) => setPasswords({...passwords, new: val})} 
+                  />
+                  <InputGroup 
+                    label="Confirm New Password" 
+                    type="password" 
+                    value={passwords.confirm} 
+                    onChange={(val) => setPasswords({...passwords, confirm: val})} 
+                  />
                 </div>
               </div>
 
