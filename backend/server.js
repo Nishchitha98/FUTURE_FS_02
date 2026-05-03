@@ -14,7 +14,7 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
-app.options("/(.*)", cors());
+// app.options handles preflight automatically via the cors() middleware above
 app.use(express.json());
 
 // Connect DB

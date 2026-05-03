@@ -67,7 +67,7 @@ function App() {
     if (isLoggedIn && !authChecking) {
       fetchLeads();
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, authChecking]);
 
   // 📊 Stats
   const totalLeads = leads.length;
